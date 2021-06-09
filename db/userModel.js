@@ -15,6 +15,21 @@ const UserSchema = new mongoose.Schema({
     required: [true, "Please provide a password!"],
     unique: false,
   },
+  dob: {
+    type: String,
+    required: false,
+    unique: false,
+  },
+  jobsAppliedFor: {
+    type: Array,
+    required: false,
+    unique: false,
+  },
+  name:{
+    type: String,
+    required:false,
+    unique: false,
+  }
 });
 
 // export UserSchema

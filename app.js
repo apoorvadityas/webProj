@@ -11,7 +11,8 @@ const auth = require("./auth");
 
 // execute database connection
 dbConnect();
-
+app.use(express.static('public'));
+app.engine('html', require('ejs').renderFile);
 // Curb Cores Error by adding a header here
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -30,11 +31,34 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.get("/", (request, response, next) => {
-  response.json({ message: "Hey! This is your server response!" });
-  next();
+// app.get("/", (request, response, next) => {
+//   response.json({ message: "Hey! This is your server response!" });
+//   next();
+// });
+app.get("/home.html", function (req, res) {
+  res.render("home.html");
+});
+app.get("/events.html", function (req, res) {
+  res.render("events.html");
 });
 
+app.get("/resources.html", function (req, res) {
+  res.render("resources.html");
+});
+app.get("/jobs.html", function (req, res) {
+  res.render("jobs.html");
+});
+app.get("/", function (req, res) {
+  res.render("home.html");
+});
+
+app.get("/login.html", function (req, res) {
+  res.render("login.html");
+});
+
+app.get("/register.html", function (req, res) {
+  res.render("register.html");
+});
 // register endpoint
 app.post("/register", (request, response) => {
   // hash the password
@@ -54,7 +78,7 @@ app.post("/register", (request, response) => {
         .then((result) => {
           response.status(201).send({
             message: "User Created Successfully",
-            result,
+           // result,
           });
         })
         // catch erroe if the new user wasn't added successfully to the database
@@ -110,7 +134,10 @@ app.post("/login", (request, response) => {
           response.status(200).send({
             message: "Login Successful",
             email: user.email,
-            token,
+            //token,
+            name: user.name,
+            JobsApplied: user.jobsAppliedFor,
+            DOB: user.dob,
           });
         })
         // catch error if password do not match
