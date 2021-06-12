@@ -29,7 +29,18 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required:false,
     unique: false,
+  },
+  currentJob:{
+    type: String,
+    required:false,
+    unique:false,
+  },
+  area: {
+    type: String,
+    required:false,
+    unique:false,
   }
+
 });
 
 // export UserSchema

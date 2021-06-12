@@ -69,6 +69,8 @@ app.post("/register", (request, response) => {
       const user = new User({
         email: request.body.email,
         password: hashedPassword,
+        name: request.body.name,
+        dob: request.body.dob,
       });
 
       // save the new user
@@ -130,7 +132,11 @@ app.post("/login", (request, response) => {
             { expiresIn: "24h" }
           );
 
-          //   return success response
+          // response.status(200).render("temp.ejs");
+            //return success response
+           // User.find({}, function(err, users) {
+            response.status(200).render("myspace.ejs",{users:user});
+           //});
           response.status(200).send({
             message: "Login Successful",
             email: user.email,
