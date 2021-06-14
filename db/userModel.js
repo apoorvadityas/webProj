@@ -39,7 +39,12 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required:false,
     unique:false,
-  }
+  },
+  isValid: {
+    type:Boolean,
+     required:false,
+     unique: false,
+  },
 
 });
 

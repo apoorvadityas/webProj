@@ -3,7 +3,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-
+const nodemailer = require("nodemailer");
 // require database connection
 const dbConnect = require("./db/dbConnect");
 const User = require("./db/userModel");
@@ -31,10 +31,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// app.get("/", (request, response, next) => {
-//   response.json({ message: "Hey! This is your server response!" });
-//   next();
-// });
+
 app.get("/home.html", function (req, res) {
   res.render("home.html");
 });
@@ -59,8 +56,22 @@ app.get("/login.html", function (req, res) {
 app.get("/register.html", function (req, res) {
   res.render("register.html");
 });
+
+app.get('/verify/:password', async(req,res) => {
+  const { password } = req.params
+  const user= await User.findOne({password:password})
+  if(user) {
+    user.isValid= true
+    await user.save()
+    res.redirect('/home.html')
+  } else {
+    res.json('user not found')
+  }
+});
+
+
 // register endpoint
-app.post("/register", (request, response) => {
+app.post("/register",async (request, response) => {
   // hash the password
   bcrypt
     .hash(request.body.password, 10)
@@ -71,8 +82,32 @@ app.post("/register", (request, response) => {
         password: hashedPassword,
         name: request.body.name,
         dob: request.body.dob,
+        isValid: false,
       });
 
+      const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'sqrt4916253649@gmail.com',
+            pass: 'squareroot'
+        }
+    });
+    
+    // email options
+    let mailOptions = {
+        from: 'sqrt4916253649@gmail.com',
+        to: user.email,
+        subject: 'subject',
+        html: `Press <a href="http://localhost:3000/verify/${user.password}"> here </a>`  
+    };
+    
+    // send email
+    transporter.sendMail(mailOptions, (error, response) => {
+        if (error) {
+            console.log(error);
+        }
+        console.log(response)
+    });
       // save the new user
       user
         .save()
