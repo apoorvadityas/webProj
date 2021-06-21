@@ -1,6 +1,5 @@
-FROM node:8.10.0
-# Create app directory
-WORKDIR /usr/src/app
+FROM node:10.16.3
+
 # Install app dependencies
 COPY package*.json ./
 RUN npm install
