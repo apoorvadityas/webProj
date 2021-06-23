@@ -25,7 +25,7 @@ I have shown how Authentication can be achieved using nodejs and mongoDB in my s
 
 
 ## SETTING UP 
-- Clone the repositury to your machine
+- Clone the repositury to your machine heloooo
 - Open up a terminal
 - Navigate into the project directory
 - Run <code>npm install</code> to install all needed dependencies
